@@ -1,101 +1,134 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // scrollY:0 => top:20 width:1487px left:0
+  // scrollY:965 => top:-49 width:174px left:46px
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  // start scrollend 1342
+  // start video retrieve transformation 1362
+
+  const imgRef = useRef<HTMLImageElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const windowWidth = window.innerWidth; // 100%
+    const windowHeight = window.innerHeight; // 100%
+
+    const imageScrollRange = 965;
+    const videoScrollRange = 965;
+
+    const isLargeScreen = windowWidth >= 1024;
+
+    const image = imgRef.current;
+    const video = videoRef.current;
+
+    // image factors
+    const imageInitialTop = isLargeScreen ? 16 : 16;
+
+    const imageInitialWidth = 1 * windowWidth;
+    const imageFinalWidth = isLargeScreen ? 160 : 160;
+    const imageWidthFactor =
+      (imageInitialWidth - imageFinalWidth) / imageScrollRange;
+
+    const imageFinalLeft = isLargeScreen ? 40 : 40;
+    const imageLeftFactor = imageFinalLeft / imageScrollRange;
+
+    // video factors
+    const videoInitialTop = 0.3 * windowWidth;
+    const videoFinalTop = isLargeScreen ? 110 : 110;
+    const videoTopFactor = (videoInitialTop - videoFinalTop) / videoScrollRange;
+
+    const videoInitialRight = 0.1 * windowWidth;
+    const videoFinalRight = isLargeScreen ? 40 : 40;
+    const videoRightFactor =
+      (videoInitialRight - videoFinalRight) / videoScrollRange;
+
+    const videoInitialWidth = 0.31 * windowWidth;
+    const videoFinalWidth = isLargeScreen ? windowWidth - 80 : 40;
+    const videoWidthFactor =
+      (videoFinalWidth - videoInitialWidth) / videoScrollRange;
+
+    const videoInitialHeight = 0.1705 * windowWidth;
+    const videoFinalHeight = isLargeScreen ? windowHeight - 150 : 40;
+    const videoHeightFactor =
+      (videoFinalHeight - videoInitialHeight) / videoScrollRange;
+
+    if (image && video) {
+      image.style.top = `${imageInitialTop}px`;
+
+      window.addEventListener("scroll", () => {
+        const scrollPosition = window.scrollY;
+
+        // image calculations
+        if (scrollPosition <= imageScrollRange) {
+          image.style.left = `${0 + scrollPosition * imageLeftFactor}px`;
+          image.style.width = `${
+            windowWidth - scrollPosition * imageWidthFactor
+          }px`;
+        } else {
+          image.style.left = `${imageFinalLeft}px`;
+          image.style.width = `${imageFinalWidth}px`;
+        }
+
+        // video calculations
+        if (scrollPosition <= videoScrollRange) {
+          video.style.top = `${
+            videoInitialTop - scrollPosition * videoTopFactor
+          }px`;
+          video.style.right = `${
+            videoInitialRight - scrollPosition * videoRightFactor
+          }px`;
+          video.style.width = `${
+            videoInitialWidth + scrollPosition * videoWidthFactor
+          }px`;
+          video.style.height = `${
+            videoInitialHeight + scrollPosition * videoHeightFactor
+          }px`;
+        } else {
+          video.style.top = `${videoFinalTop}px`;
+          video.style.right = `${videoFinalRight}px`;
+          video.style.width = `${videoFinalWidth}px`;
+          video.style.height = `${videoFinalHeight}px`;
+        }
+      });
+    }
+  }, []);
+
+  return (
+    <div dir="ltr" className="scroll-section-1 h-[1342px]">
+      <div className="slide-1  sticky top-0 ">
+        <img
+          ref={imgRef}
+          src="https://areebe.com/wp-content/uploads/2025/02/Areeb-Logo-01-copy.png"
+          alt="Slide Image"
+          className=" absolute "
+          style={{
+            top: "16px",
+            left: "0px",
+            width: "100%",
+          }}
+        />
+
+        <video
+          autoPlay
+          muted
+          loop
+          ref={videoRef}
+          className=" absolute rounded-xl top-[30vw] right-[10vw] block bg-black max-h-[calc(100vh-120px)]"
+          style={{
+            width: "31vw",
+            height: "17.05vw",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <source
+            src="https://www.w3schools.com/html/mov_bbb.mp4"
+            type="video/mp4"
+          ></source>
+          Your browser does not support the video tag.
+        </video>
+      </div>
     </div>
   );
 }
