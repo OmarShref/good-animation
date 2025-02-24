@@ -25,10 +25,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        dir="ltr"
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-[600vh]`}
       >
-        <header className=" h-[88px] lg:h-[110px] bg-gray-100 fixed w-full top-0"></header>
+        <header
+          id="main-header"
+          className=" h-[88px] lg:h-[110px] fixed w-full top-0 z-10 flex justify-between items-center px-10"
+        >
+          <img
+            id="header-logo"
+            src="https://areebe.com/wp-content/uploads/2025/02/Areeb-Logo-01-copy.png"
+            alt="Slide Image"
+            style={{
+              width: "160px",
+              visibility: "hidden",
+            }}
+          />
+        </header>
         {children}
+        {/* =========================================== */}
+        <div>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe est
+          voluptates eaque quae doloremque libero expedita magnam repudiandae.
+          Itaque atque neque est aliquid rerum sed earum quidem, nobis quo
+          dolorem!
+        </div>
       </body>
     </html>
   );
