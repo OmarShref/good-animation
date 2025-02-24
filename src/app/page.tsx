@@ -131,18 +131,27 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <div className="scroll-section-1 h-[1342px]">
-        <div className="slide-1  sticky top-0 ">
+    <div id="hero-wrapper">
+      <div
+        style={{
+          height: "1342px",
+        }}
+      >
+        <div
+          style={{
+            position: "sticky",
+            top: "0px",
+          }}
+        >
           <img
             ref={imgRef}
             src="https://areebe.com/wp-content/uploads/2025/02/Areeb-Logo-01-copy.png"
             alt="Slide Image"
-            className=" absolute "
             style={{
               top: "16px",
               insetInlineStart: "0px",
               width: "100%",
+              position: "absolute",
             }}
           />
 
@@ -151,12 +160,16 @@ export default function Home() {
             muted
             loop
             ref={videoRef}
-            className=" absolute rounded-xl block bg-black max-h-[calc(100vh-150px)]"
             style={{
               top: "30vw",
               insetInlineEnd: "10vw",
               width: "31vw",
               height: "17.05vw",
+              display: "block",
+              position: "absolute",
+              borderRadius: "12px",
+              backgroundColor: "black",
+              maxHeight: "calc(100vh - 150px)",
             }}
           >
             <source
@@ -170,7 +183,11 @@ export default function Home() {
 
       {/* =========================================== */}
 
-      <div className=" h-screen"></div>
-    </>
+      <div
+        style={{
+          height: "100vh",
+        }}
+      ></div>
+    </div>
   );
 }

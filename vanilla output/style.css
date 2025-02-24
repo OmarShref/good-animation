@@ -1,0 +1,8 @@
+#hero-wrapper {
+  display: none;
+}
+@media only screen and (min-width: 1024px) {
+  #hero-wrapper {
+    display: block;
+  }
+}
